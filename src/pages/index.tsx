@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export default function Home(): JSX.Element {
 	return <Box />;
