@@ -15,7 +15,7 @@ Proper Readme will follow
 ## Setup
 
 Click use this template or clone with
-`git clone https://github.com/HazimAr/Nextjs-ChakraUI-Boilerplate`
+`git clone https://github.com/HazimAr/Tic-Tac-Toe-Multiplayer`
 
 install dependencies `npm i` or `yarn`
 
