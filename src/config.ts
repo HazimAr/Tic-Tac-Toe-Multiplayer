@@ -1,5 +1,7 @@
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
+const DB_URL = IS_PRODUCTION ? "" : "http://localhost:8080";
+
 type MetaType = {
 	title: string;
 	lang: string;
@@ -12,7 +14,7 @@ const META: MetaType = {
 	lang: "en-us",
 	description:
 		"Play Tic-Tac-Toe in real time with your friends. Just invite them to your room using a link and boom you will have endless fun.",
-	url: "https://boilerplate.hazimarafa.tech",
+	url: "",
 };
 
-export { IS_PRODUCTION, META };
+export { IS_PRODUCTION, META, DB_URL };

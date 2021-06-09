@@ -12,6 +12,9 @@ import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { DB_URL } from "config";
+import { io, Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
 let Cell = styled(Center)`
 	border: 5px solid black;
@@ -46,13 +49,19 @@ let Cell = styled(Center)`
 // @ts-ignore
 Cell = motion(Cell);
 
-export default function Board(): JSX.Element {
+let socket: Socket;
+
+socket = io(DB_URL);
+console.log(socket);
+
+export function Board(): JSX.Element {
 	const [board, setBoard]: any = useState(
 		Array.from({ length: 9 }).fill(null)
 	);
 	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
 	const [hover, setHover] = useState([false, -1]);
+	const [fromUser, setFromUser] = useState(false);
 
 	function calculateWinner(board: boolean[]) {
 		const lines = [
@@ -100,20 +109,44 @@ export default function Board(): JSX.Element {
 		return true;
 	}
 
-	function restart() {
-		setBoard(Array.from({ length: 9 }).fill(null));
+	function restart(emit = true) {
+		emit ? socket.emit("restart") : null;
+
+		const nBoard = Array.from({
+			length: 9,
+		}).fill(null);
+
+		setBoard(nBoard);
 		setTurn(true);
+
 		// eslint-disable-next-line unicorn/no-useless-undefined
 		setWinner(undefined);
 	}
 
 	useEffect(() => {
+		if (fromUser) {
+			console.log("user");
+			socket.emit("turn", board, turn);
+		} else {
+			console.log("server");
+		}
 		const winner = calculateWinner(board);
 		if (winner !== undefined) {
 			// @ts-ignore
 			winner !== "tie" ? setWinner(winner) : setWinner(null);
 		}
 	}, [board]);
+
+	useEffect(() => {
+		socket.on("turn", (board, turn) => {
+			setFromUser(false);
+			setTurn(turn);
+			setBoard(board);
+		});
+		socket.on("restart", () => {
+			restart(false);
+		});
+	}, []);
 
 	return (
 		<Box>
@@ -139,8 +172,9 @@ export default function Board(): JSX.Element {
 
 									nBoard[i] = turn;
 
-									setBoard(nBoard);
+									setFromUser(true);
 									setTurn(!turn);
+									setBoard(nBoard);
 								}
 							}}
 							onHoverStart={() => {
