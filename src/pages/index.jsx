@@ -5,12 +5,13 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 
 /* eslint-disable no-negated-condition */
-import { Button, Box, Grid, Center } from "@chakra-ui/react";
+import { Box, Grid, Center, Button } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-const Cell = styled(Box)`
+let Cell = styled(Center)`
 	border: 5px solid black;
 	height: 200px;
 	width: 200px;
@@ -40,10 +41,13 @@ const Cell = styled(Box)`
 	}
 `;
 
+Cell = motion(Cell);
+
 export default function Index() {
 	const [board, setBoard] = useState(Array.from({ length: 9 }).fill(null));
 	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
+	const [hover, setHover] = useState([false, 0]);
 
 	function calculateWinner(board) {
 		const lines = [
@@ -87,12 +91,26 @@ export default function Index() {
 		setWinner(undefined);
 	}
 
+	function isValidMove(i) {
+		if (board[i] !== null) {
+			return false;
+		}
+		if (winner !== undefined) {
+			return false;
+		}
+		return true;
+	}
+
 	useEffect(() => {
 		const winner = calculateWinner(board);
 		if (winner !== undefined) {
 			winner !== "tie" ? setWinner(winner) : setWinner(null);
 		}
 	}, [board]);
+
+	useEffect(() => {
+		// console.log(hover);
+	}, [hover]);
 	return (
 		<Center h="100vh">
 			<Box>
@@ -106,27 +124,48 @@ export default function Index() {
 							<Cell
 								key={i}
 								onClick={() => {
-									if (board[i] !== null) {
-										return;
+									if (isValidMove(i)) {
+										setHover([false, i]);
+										const nBoard = Array.from({
+											length: 9,
+										}).fill(null);
+
+										board.map((i, v) => {
+											nBoard[v] = i;
+										});
+
+										nBoard[i] = turn;
+
+										setBoard(nBoard);
+										setTurn(!turn);
 									}
-									if (winner !== undefined) {
-										return;
+								}}
+								onHoverStart={(e) => {
+									if (isValidMove(i)) {
+										if (hover[1] === i) return;
+										setHover([true, i]);
 									}
-									const nBoard = Array.from({
-										length: 9,
-									}).fill(null);
-
-									board.map((i, v) => {
-										nBoard[v] = i;
-									});
-
-									nBoard[i] = turn;
-
-									setBoard(nBoard);
-									setTurn(!turn);
+								}}
+								onHoverEnd={(e) => {
+									if (isValidMove(i)) {
+										setHover([false, 0]);
+									}
 								}}
 							>
-								{yee !== null ? yee ? <O /> : <X /> : null}
+								{yee !== null ? (
+									yee ? (
+										<O color="1" />
+									) : (
+										<X color="1" />
+									)
+								) : null}
+								{hover[0] && hover[1] === i ? (
+									turn ? (
+										<O color=".2" />
+									) : (
+										<X color=".2" />
+									)
+								) : null}
 							</Cell>
 						);
 					})}
@@ -140,7 +179,9 @@ export default function Index() {
 					: null}
 				<Box>
 					{winner !== undefined && winner !== null ? (
-						<Button onClick={restart}>Restart</Button>
+						<Button variant="outline" onClick={restart}>
+							Restart
+						</Button>
 					) : null}
 				</Box>
 			</Box>

@@ -1,4 +1,5 @@
 import "@styles/global.css";
+import { ChakraProvider } from "@chakra-ui/react";
 import Footer from "@components/footer";
 import Header from "@components/header";
 import { META } from "config";
@@ -14,9 +15,9 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 			</Head>
 
 			<Header />
-
-			<Component {...pageProps} />
-
+			<ChakraProvider>
+				<Component {...pageProps} />
+			</ChakraProvider>
 			<Footer />
 		</>
 	);
