@@ -49,12 +49,7 @@ let Cell = styled(Center)`
 // @ts-ignore
 Cell = motion(Cell);
 
-let socket: Socket;
-
-socket = io(DB_URL);
-console.log(socket);
-
-export function Board(): JSX.Element {
+export function Board({ socket, room }: any): JSX.Element {
 	const [board, setBoard]: any = useState(
 		Array.from({ length: 9 }).fill(null)
 	);
@@ -110,7 +105,7 @@ export function Board(): JSX.Element {
 	}
 
 	function restart(emit = true) {
-		emit ? socket.emit("restart") : null;
+		emit ? socket.emit("restart", room) : null;
 
 		const nBoard = Array.from({
 			length: 9,
@@ -125,10 +120,7 @@ export function Board(): JSX.Element {
 
 	useEffect(() => {
 		if (fromUser) {
-			console.log("user");
-			socket.emit("turn", board, turn);
-		} else {
-			console.log("server");
+			socket.emit("turn", board, turn, room);
 		}
 		const winner = calculateWinner(board);
 		if (winner !== undefined) {
@@ -138,7 +130,7 @@ export function Board(): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
-		socket.on("turn", (board, turn) => {
+		socket.on("turn", (board: boolean[], turn: boolean) => {
 			setFromUser(false);
 			setTurn(turn);
 			setBoard(board);
