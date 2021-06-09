@@ -13,7 +13,7 @@ export default function Index(): JSX.Element {
 	const router = useRouter();
 	const [room, setRoom] = useState("");
 	const [started, setStarted] = useState(false);
-	const url = `${WEB}${router.asPath}`;
+	const url = `${WEB}${router.asPath}&start=true`;
 
 	const { hasCopied, onCopy } = useClipboard(url);
 
@@ -23,9 +23,13 @@ export default function Index(): JSX.Element {
 			setRoom(room);
 			socket.emit("join-room", room);
 		}
+		if (getParameterByName("start")) {
+			setStarted(true)
+		}
 		socket.on("start", () => {
 			setStarted(true);
 		});
+		socket.emit("check-start");
 	}, []);
 	return (
 		<Center h="100vh">

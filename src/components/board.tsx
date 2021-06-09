@@ -12,7 +12,7 @@ import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import router from "next/router"
+import router from "next/router";
 
 let Cell = styled(Center)`
 	border: 5px solid black;
@@ -119,6 +119,10 @@ export function Board({ socket, room }: any): JSX.Element {
 		// eslint-disable-next-line unicorn/no-useless-undefined
 		setWinner(undefined);
 	}
+	useEffect(() => {
+		console.log(hover);
+		socket.emit("hover", hover);
+	}, [hover]);
 
 	useEffect(() => {
 		if (fromUser) {
@@ -143,9 +147,14 @@ export function Board({ socket, room }: any): JSX.Element {
 		socket.on("data", (turn: boolean) => {
 			setUserTurn(turn);
 		});
-		socket.on('end', () => { 
-			router.push('/close')
-		})
+		socket.on("end", () => {
+			router.push("/close");
+		});
+		socket.on("hover", (hover: any[]) => {
+			if (turn !== userTurn) {
+				setHover(hover);
+			}
+		});
 	}, []);
 
 	return (
@@ -187,7 +196,7 @@ export function Board({ socket, room }: any): JSX.Element {
 							}}
 							onHoverEnd={() => {
 								if (isValidMove(i)) {
-									setHover([false, 0]);
+									setHover([false, -1]);
 								}
 							}}
 						>

@@ -6,7 +6,7 @@ const DB_URL = IS_PRODUCTION
 
 const WEB = IS_PRODUCTION
 	? "https://tic-tac-toe-online.vercel.app"
-	: "https://localhost:3000";
+	: "http://localhost:3000";
 
 type MetaType = {
 	title: string;
