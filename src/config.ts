@@ -1,8 +1,12 @@
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-const DB_URL = IS_PRODUCTION? "https://tic-calpico.herokuapp.com" :"http://localhost:8888";
+const DB_URL = IS_PRODUCTION
+	? "https://tic-calpico.herokuapp.com"
+	: "http://localhost:8888";
 
-
+const WEB = IS_PRODUCTION
+	? "https://tic-tac-toe-online.vercel.app"
+	: "https://localhost:3000";
 
 type MetaType = {
 	title: string;
@@ -19,4 +23,4 @@ const META: MetaType = {
 	url: "",
 };
 
-export { IS_PRODUCTION, META, DB_URL };
+export { IS_PRODUCTION, META, DB_URL, WEB };
