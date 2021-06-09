@@ -1,6 +1,7 @@
 import { Box, Button, Center, Flex, Heading, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import router from "next/router";
+import {v4 as uuid} from 'uuid'
 
 export default function Index(): JSX.Element {
 	const [room, setRoom] = useState("");
