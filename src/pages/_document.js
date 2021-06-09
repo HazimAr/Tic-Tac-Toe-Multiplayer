@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import { ColorModeScript } from "@chakra-ui/react";
+import theme from "@styles/theme";
 
 import { GA_TRACKING_ID, META } from "../config.ts";
 
@@ -57,6 +59,9 @@ export default class MyDocument extends Document {
 					<meta name="twitter:image" content={META.image} />
 				</Head>
 				<body>
+					<ColorModeScript
+						initialColorMode={theme.initialColorMode}
+					/>
 					<Main />
 					<NextScript />
 				</body>
