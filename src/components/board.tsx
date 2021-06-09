@@ -12,6 +12,7 @@ import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import router from "next/router"
 
 let Cell = styled(Center)`
 	border: 5px solid black;
@@ -142,6 +143,9 @@ export function Board({ socket, room }: any): JSX.Element {
 		socket.on("data", (turn: boolean) => {
 			setUserTurn(turn);
 		});
+		socket.on('end', () => { 
+			router.push('/close')
+		})
 	}, []);
 
 	return (
@@ -212,7 +216,9 @@ export function Board({ socket, room }: any): JSX.Element {
 							? "O has won"
 							: "X has won"
 						: "tie"
-					: null}
+					: turn === userTurn
+					? "You're Turn"
+					: "Opponent's Turn"}
 				<Box>
 					{winner !== undefined ? (
 						//@ts-ignore
