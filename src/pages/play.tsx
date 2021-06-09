@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Center, Heading } from "@chakra-ui/react";
 import { Board } from "@components/board";
 import { DB_URL, WEB } from "config";
 import { useEffect, useState } from "react";
