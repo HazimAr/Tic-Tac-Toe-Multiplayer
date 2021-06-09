@@ -1,9 +1,9 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable unicorn/no-useless-undefined */
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+
 /* eslint-disable unicorn/consistent-function-scoping */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable no-negated-condition */
 import { Button, Box, Grid, Center } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
@@ -40,12 +40,12 @@ const Cell = styled(Box)`
 	}
 `;
 
-export default function Index(): JSX.Element {
+export default function Index() {
 	const [board, setBoard] = useState(Array.from({ length: 9 }).fill(null));
 	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
 
-	function calculateWinner(board: any[]) {
+	function calculateWinner(board) {
 		const lines = [
 			[0, 1, 2],
 			[3, 4, 5],
