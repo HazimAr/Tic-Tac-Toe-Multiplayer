@@ -12,9 +12,7 @@ import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { DB_URL } from "config";
-import { io, Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
+
 
 let Cell = styled(Center)`
 	border: 5px solid black;
