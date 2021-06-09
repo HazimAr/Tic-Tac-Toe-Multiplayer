@@ -116,7 +116,7 @@ export default function Board(): JSX.Element {
 	}, [board]);
 
 	return (
-		<>
+		<Box>
 			<Grid
 				justifyContent="center"
 				alignContent="center"
@@ -184,13 +184,13 @@ export default function Board(): JSX.Element {
 						: "tie"
 					: null}
 				<Box>
-					{winner !== undefined && winner !== null ? (
+					{winner !== undefined ? (
 						<Button variant="outline" onClick={restart}>
 							Restart
 						</Button>
 					) : null}
 				</Box>
 			</Box>
-		</>
+		</Box>
 	);
 }
