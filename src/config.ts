@@ -1,7 +1,7 @@
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-const DB_URL = "https://tic-calpico.herokuapp.com";
-// const DB_URL = "https://f8513c61268b.ngrok.io";
+const DB_URL = IS_PRODUCTION? "https://tic-calpico.herokuapp.com" :"http://localhost:8888";
+
 
 
 type MetaType = {
