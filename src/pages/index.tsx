@@ -28,7 +28,7 @@ export default function Index(): JSX.Element {
 					>
 						Join
 					</Button>
-					<Button onClick={() => {}}>Create Private Match</Button>
+					<Button onClick={() => {router.push(`/play?room=${uuid()}`);}}>Create Private Match</Button>
 				</Flex>
 			</Box>
 		</Center>
