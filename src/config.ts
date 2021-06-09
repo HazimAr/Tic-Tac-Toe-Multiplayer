@@ -4,7 +4,7 @@ const DB_URL = "https://tic-calpico.herokuapp.com";
 // const DB_URL = "https://f8513c61268b.ngrok.io";
 
 
-https: type MetaType = {
+type MetaType = {
 	title: string;
 	lang: string;
 	description: string;
