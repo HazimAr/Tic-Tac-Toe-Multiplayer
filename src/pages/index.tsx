@@ -1,5 +1,5 @@
-import Board from "@components/board";
 import { Center } from "@chakra-ui/react";
+import Board from "@components/board";
 
 export default function Index(): JSX.Element {
 	return (
