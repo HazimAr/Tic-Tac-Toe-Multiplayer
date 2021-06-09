@@ -3,15 +3,17 @@
 Proper Readme will follow
 
 ## Stack
-- Typescript
-- ChakraUI
-- NextJS
-- Styled Components
-- Lightweight
-- Google Analytics
-- ESLint
-- Jest
-- React Icons
+
+-   Typescript
+-   ChakraUI
+-   NextJS
+-   Styled Components
+-   Lightweight
+-   Google Analytics
+-   ESLint
+-   Jest
+-   React Icons
+
 ## Setup
 
 Click use this template or clone with

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-useless-undefined */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable unicorn/consistent-function-scoping */
@@ -80,8 +81,8 @@ export default function Index(): JSX.Element {
 	}
 
 	function restart() {
-		setBoard(Array.from({ length: 9 }).fill(null))
-		setTurn(true)
+		setBoard(Array.from({ length: 9 }).fill(null));
+		setTurn(true);
 		setWinner(undefined);
 	}
 
