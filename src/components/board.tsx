@@ -209,6 +209,7 @@ export function Board({ socket, room }: any): JSX.Element {
 					: null}
 				<Box>
 					{winner !== undefined ? (
+						//@ts-ignore
 						<Button variant="outline" onClick={restart}>
 							Restart
 						</Button>
