@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable import/no-default-export */
 /* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable unicorn/no-useless-undefined */
 /* eslint-disable react/no-array-index-key */
-
 /* eslint-disable unicorn/consistent-function-scoping */
-
 /* eslint-disable no-negated-condition */
 import { Box, Grid, Center, Button } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
@@ -41,15 +43,18 @@ let Cell = styled(Center)`
 	}
 `;
 
+// @ts-ignore
 Cell = motion(Cell);
 
-export default function Index() {
-	const [board, setBoard] = useState(Array.from({ length: 9 }).fill(null));
+export default function Board(): JSX.Element {
+	const [board, setBoard]: any = useState(
+		Array.from({ length: 9 }).fill(null)
+	);
 	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
 	const [hover, setHover] = useState([false, -1]);
 
-	function calculateWinner(board) {
+	function calculateWinner(board: boolean[]) {
 		const lines = [
 			[0, 1, 2],
 			[3, 4, 5],
@@ -75,7 +80,7 @@ export default function Index() {
 		}
 
 		let nullCount = 0;
-		board.forEach((i) => {
+		board.forEach((i: boolean) => {
 			if (i === null) {
 				nullCount += 1;
 			}
@@ -85,13 +90,7 @@ export default function Index() {
 		}
 	}
 
-	function restart() {
-		setBoard(Array.from({ length: 9 }).fill(null));
-		setTurn(true);
-		setWinner(undefined);
-	}
-
-	function isValidMove(i) {
+	function isValidMove(i: number) {
 		if (board[i] !== null) {
 			return false;
 		}
@@ -101,74 +100,82 @@ export default function Index() {
 		return true;
 	}
 
+	function restart() {
+		setBoard(Array.from({ length: 9 }).fill(null));
+		setTurn(true);
+		// eslint-disable-next-line unicorn/no-useless-undefined
+		setWinner(undefined);
+	}
+
 	useEffect(() => {
 		const winner = calculateWinner(board);
 		if (winner !== undefined) {
+			// @ts-ignore
 			winner !== "tie" ? setWinner(winner) : setWinner(null);
 		}
 	}, [board]);
 
 	return (
-		<Center h="100vh">
+		<>
+			<Grid
+				justifyContent="center"
+				alignContent="center"
+				templateColumns="repeat(3, auto)"
+			>
+				{board.map((yee: boolean, i: number) => {
+					return (
+						<Cell
+							key={i}
+							onClick={() => {
+								if (isValidMove(i)) {
+									setHover([false, i]);
+									const nBoard = Array.from({
+										length: 9,
+									}).fill(null);
+
+									board.map((i: number, v: number) => {
+										nBoard[v] = i;
+									});
+
+									nBoard[i] = turn;
+
+									setBoard(nBoard);
+									setTurn(!turn);
+								}
+							}}
+							onHoverStart={() => {
+								if (isValidMove(i)) {
+									if (hover[1] === i) {
+										return;
+									}
+									setHover([true, i]);
+								}
+							}}
+							onHoverEnd={() => {
+								if (isValidMove(i)) {
+									setHover([false, 0]);
+								}
+							}}
+						>
+							{yee !== null ? (
+								yee ? (
+									<O color="white" />
+								) : (
+									<X color="white" />
+								)
+							) : null}
+							{hover[1] === i && hover[0] ? (
+								turn ? (
+									<O color="#484d56" />
+								) : (
+									<X color="#484d56" />
+								)
+							) : null}
+						</Cell>
+					);
+				})}
+			</Grid>
 			<Box>
-				<Grid
-					justifyContent="center"
-					alignContent="center"
-					templateColumns="repeat(3, auto)"
-				>
-					{board.map((yee, i) => {
-						return (
-							<Cell
-								key={i}
-								onClick={() => {
-									if (isValidMove(i)) {
-										setHover([false, i]);
-										const nBoard = Array.from({
-											length: 9,
-										}).fill(null);
-
-										board.map((i, v) => {
-											nBoard[v] = i;
-										});
-
-										nBoard[i] = turn;
-
-										setBoard(nBoard);
-										setTurn(!turn);
-									}
-								}}
-								onHoverStart={(e) => {
-									if (isValidMove(i)) {
-										if (hover[1] === i) {
-											return;
-										}
-										setHover([true, i]);
-									}
-								}}
-								onHoverEnd={(e) => {
-									if (isValidMove(i)) {
-										setHover([false, 0]);
-									}
-								}}
-							>
-								{yee !== null ? (
-									yee ? (
-										<O color="white" />
-									) : (
-										<X color="white" />
-									)
-								) : null}
-								{hover[1] === i && hover[0] ? (
-									turn ? (
-										<O color="#484d56" />
-									) : (
-										<X color="#484d56" />
-									)
-								) : null}
-							</Cell>
-						);
-					})}
-				</Grid>
 				{winner !== undefined
 					? winner !== null
 						? winner
@@ -184,6 +191,6 @@ export default function Index() {
 					) : null}
 				</Box>
 			</Box>
-		</Center>
+		</>
 	);
 }
