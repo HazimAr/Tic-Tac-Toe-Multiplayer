@@ -47,7 +47,7 @@ export default function Index() {
 	const [board, setBoard] = useState(Array.from({ length: 9 }).fill(null));
 	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
-	const [hover, setHover] = useState([false, 0]);
+	const [hover, setHover] = useState([false, -1]);
 
 	function calculateWinner(board) {
 		const lines = [
@@ -108,9 +108,6 @@ export default function Index() {
 		}
 	}, [board]);
 
-	useEffect(() => {
-		// console.log(hover);
-	}, [hover]);
 	return (
 		<Center h="100vh">
 			<Box>
@@ -142,7 +139,9 @@ export default function Index() {
 								}}
 								onHoverStart={(e) => {
 									if (isValidMove(i)) {
-										if (hover[1] === i) return;
+										if (hover[1] === i) {
+											return;
+										}
 										setHover([true, i]);
 									}
 								}}
@@ -154,16 +153,16 @@ export default function Index() {
 							>
 								{yee !== null ? (
 									yee ? (
-										<O color="1" />
+										<O color="white" />
 									) : (
-										<X color="1" />
+										<X color="white" />
 									)
 								) : null}
-								{hover[0] && hover[1] === i ? (
+								{hover[1] === i && hover[0] ? (
 									turn ? (
-										<O color=".2" />
+										<O color="#484d56" />
 									) : (
-										<X color=".2" />
+										<X color="#484d56" />
 									)
 								) : null}
 							</Cell>
