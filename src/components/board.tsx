@@ -13,7 +13,6 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-
 let Cell = styled(Center)`
 	border: 5px solid black;
 	height: 200px;
@@ -55,6 +54,7 @@ export function Board({ socket, room }: any): JSX.Element {
 	const [winner, setWinner] = useState();
 	const [hover, setHover] = useState([false, -1]);
 	const [fromUser, setFromUser] = useState(false);
+	const [userTurn, setUserTurn] = useState(true);
 
 	function calculateWinner(board: boolean[]) {
 		const lines = [
@@ -93,13 +93,16 @@ export function Board({ socket, room }: any): JSX.Element {
 	}
 
 	function isValidMove(i: number) {
-		if (board[i] !== null) {
-			return false;
+		if (turn === userTurn) {
+			if (board[i] !== null) {
+				return false;
+			}
+			if (winner !== undefined) {
+				return false;
+			}
+			return true;
 		}
-		if (winner !== undefined) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 
 	function restart(emit = true) {
@@ -135,6 +138,9 @@ export function Board({ socket, room }: any): JSX.Element {
 		});
 		socket.on("restart", () => {
 			restart(false);
+		});
+		socket.on("data", (turn: boolean) => {
+			setUserTurn(turn);
 		});
 	}, []);
 
