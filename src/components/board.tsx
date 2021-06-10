@@ -51,11 +51,11 @@ export function Board({ socket, room }: any): JSX.Element {
 	const [board, setBoard]: any = useState(
 		Array.from({ length: 9 }).fill(null)
 	);
-	const [turn, setTurn] = useState(1);
+	const [turn, setTurn] = useState(true);
 	const [winner, setWinner] = useState();
 	const [hover, setHover] = useState([false, -1]);
 	const [fromUser, setFromUser] = useState(false);
-	const [userTurn, setUserTurn] = useState(1);
+	const [userTurn, setUserTurn] = useState(true);
 
 	function calculateWinner(board: boolean[]) {
 		const lines = [
@@ -71,14 +71,14 @@ export function Board({ socket, room }: any): JSX.Element {
 		for (const i of lines) {
 			const [a, b, c] = i;
 			if (board[a] === true && board[b] === true && board[c] === true) {
-				return 1;
+				return true;
 			}
 			if (
 				board[a] === false &&
 				board[b] === false &&
 				board[c] === false
 			) {
-				return 2;
+				return false;
 			}
 		}
 
@@ -114,7 +114,7 @@ export function Board({ socket, room }: any): JSX.Element {
 		}).fill(null);
 
 		setBoard(nBoard);
-		setTurn(1);
+		setTurn(true);
 
 		// eslint-disable-next-line unicorn/no-useless-undefined
 		setWinner(undefined);
@@ -136,7 +136,7 @@ export function Board({ socket, room }: any): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
-		socket.on("turn", (board: boolean[], turn: number) => {
+		socket.on("turn", (board: boolean[], turn: boolean) => {
 			setFromUser(false);
 			setTurn(turn);
 			setBoard(board);
