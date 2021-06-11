@@ -24,7 +24,7 @@ export default function Index(): JSX.Element {
 			socket.emit("join-room", room);
 		}
 		if (getParameterByName("start")) {
-			setStarted(true)
+			setStarted(true);
 		}
 		socket.on("start", () => {
 			setStarted(true);
@@ -35,7 +35,11 @@ export default function Index(): JSX.Element {
 		<Center h="100vh">
 			<Box>
 				{started ? (
-					<Board socket={socket} room={room} />
+					socket ? (
+						<Board socket={socket} room={room} />
+					) : (
+						"Connecting to websocket ..."
+					)
 				) : (
 					<>
 						<Heading>Send this link to a friend</Heading>

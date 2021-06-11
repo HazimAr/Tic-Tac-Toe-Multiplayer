@@ -51,11 +51,12 @@ export function Board({ socket, room }: any): JSX.Element {
 	const [board, setBoard]: any = useState(
 		Array.from({ length: 9 }).fill(null)
 	);
-	const [turn, setTurn] = useState(1);
+	const [turn, setTurn] = useState(0);
 	const [winner, setWinner] = useState();
-	const [hover, setHover] = useState([false, -1]);
+	const [hover, setHover] = useState(-1);
+	const [hoverDone, setHoverDone] = useState(false);
 	const [fromUser, setFromUser] = useState(false);
-	const [userTurn, setUserTurn] = useState(1);
+	const [userTurn, setUserTurn] = useState(0);
 
 	function calculateWinner(board: boolean[]) {
 		const lines = [
@@ -119,9 +120,23 @@ export function Board({ socket, room }: any): JSX.Element {
 		// eslint-disable-next-line unicorn/no-useless-undefined
 		setWinner(undefined);
 	}
+
 	useEffect(() => {
-		console.log(hover);
-		socket.emit("hover", hover);
+		console.log("real hover", hover);
+		if (!hoverDone) {
+			socket.on("hover", (hover: number) => {
+				console.log("server hover", hover);
+
+				if (turn !== userTurn) {
+					console.log(setHover)
+					setHover(hover);
+				}
+			});
+			setHoverDone(!hoverDone);
+		}
+		if (turn === userTurn) {
+			socket.emit("hover", hover);
+		}
 	}, [hover]);
 
 	useEffect(() => {
@@ -136,6 +151,9 @@ export function Board({ socket, room }: any): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
+		console.log(`Turn:${turn}, UserTurn:${userTurn}`);
+	}, [turn, userTurn]);
+	useEffect(() => {
 		socket.on("turn", (board: boolean[], turn: number) => {
 			setFromUser(false);
 			setTurn(turn);
@@ -144,16 +162,11 @@ export function Board({ socket, room }: any): JSX.Element {
 		socket.on("restart", () => {
 			restart(false);
 		});
-		socket.on("data", (turn: boolean) => {
+		socket.on("data", (turn: number) => {
 			setUserTurn(turn);
 		});
 		socket.on("end", () => {
 			router.push("/close");
-		});
-		socket.on("hover", (hover: any[]) => {
-			if (turn !== userTurn) {
-				setHover(hover);
-			}
 		});
 	}, []);
 
@@ -170,7 +183,7 @@ export function Board({ socket, room }: any): JSX.Element {
 							key={i}
 							onClick={() => {
 								if (isValidMove(i)) {
-									setHover([false, i]);
+									setHover(-1);
 									const nBoard = Array.from({
 										length: 9,
 									}).fill(null);
@@ -182,36 +195,36 @@ export function Board({ socket, room }: any): JSX.Element {
 									nBoard[i] = turn;
 
 									setFromUser(true);
-									setTurn(!turn);
+									setTurn(turn ? 0 : 1);
 									setBoard(nBoard);
 								}
 							}}
 							onHoverStart={() => {
 								if (isValidMove(i)) {
-									if (hover[1] === i) {
+									if (hover === i) {
 										return;
 									}
-									setHover([true, i]);
+									setHover(i);
 								}
 							}}
 							onHoverEnd={() => {
 								if (isValidMove(i)) {
-									setHover([false, -1]);
+									setHover(-1);
 								}
 							}}
 						>
 							{yee !== null ? (
 								yee ? (
-									<O color="white" />
-								) : (
 									<X color="white" />
+								) : (
+									<O color="white" />
 								)
 							) : null}
-							{hover[1] === i && hover[0] ? (
+							{hover === i ? (
 								turn ? (
-									<O color="#484d56" />
-								) : (
 									<X color="#484d56" />
+								) : (
+									<O color="#484d56" />
 								)
 							) : null}
 						</Cell>
