@@ -13,33 +13,29 @@ export default function Index(): JSX.Element {
 	const router = useRouter();
 	const [room, setRoom] = useState("");
 	const [started, setStarted] = useState(false);
-	const url = `${WEB}${router.asPath}&start=true`;
+	const url = `${WEB}${router.asPath}`;
 
 	const { hasCopied, onCopy } = useClipboard(url);
 
 	useEffect(() => {
-		const room = getParameterByName("room");
-		if (room) {
-			setRoom(room);
-			socket.emit("join-room", room);
-		}
-		if (getParameterByName("start")) {
-			setStarted(true);
-		}
-		socket.on("start", () => {
-			setStarted(true);
+		socket.on("connect", () => {
+			socket.on("start", () => {
+				setStarted(true);
+			});
+			const room = getParameterByName("room");
+			if (room) {
+				setRoom(room);
+				socket.emit("join-room", room);
+			}
+			socket.emit("check-start");
+			console.log(socket.connected);
 		});
-		socket.emit("check-start");
 	}, []);
 	return (
 		<Center h="100vh">
 			<Box>
 				{started ? (
-					socket ? (
-						<Board socket={socket} room={room} />
-					) : (
-						"Connecting to websocket ..."
-					)
+					<Board socket={socket} room={room} />
 				) : (
 					<>
 						<Heading>Send this link to a friend</Heading>

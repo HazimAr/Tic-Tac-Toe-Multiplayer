@@ -54,7 +54,6 @@ export function Board({ socket, room }: any): JSX.Element {
 	const [turn, setTurn] = useState(0);
 	const [winner, setWinner] = useState();
 	const [hover, setHover] = useState(-1);
-	const [hoverDone, setHoverDone] = useState(false);
 	const [fromUser, setFromUser] = useState(false);
 	const [userTurn, setUserTurn] = useState(0);
 
@@ -118,18 +117,16 @@ export function Board({ socket, room }: any): JSX.Element {
 	}
 
 	useEffect(() => {
-		console.log("real hover", hover);
-		if (!hoverDone) {
-			socket.on("hover", (hover: number) => {
-				console.log("server hover", hover);
+		// console.log("real hover", hover);
 
-				if (turn !== userTurn) {
-					console.log(setHover);
-					setHover(hover);
-				}
-			});
-			setHoverDone(!hoverDone);
-		}
+		socket.on("hover", (hover: number) => {
+			// console.log("server hover", hover);
+
+			if (turn !== userTurn) {
+				setHover(hover);
+			}
+		});
+
 		if (turn === userTurn) {
 			socket.emit("hover", hover);
 		}
@@ -147,8 +144,9 @@ export function Board({ socket, room }: any): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
-		console.log(`Turn:${turn}, UserTurn:${userTurn}`);
+		// console.log(`Turn:${turn}, UserTurn:${userTurn}`);
 	}, [turn, userTurn]);
+
 	useEffect(() => {
 		socket.on("turn", (board: boolean[], turn: number) => {
 			setFromUser(false);
