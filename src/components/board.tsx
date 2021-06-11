@@ -80,7 +80,7 @@ export function Board({ socket, room }: any): JSX.Element {
 		}
 
 		let nullCount = 0;
-		board.forEach((i: boolean) => {
+		board.forEach((i: number) => {
 			if (i === null) {
 				nullCount += 1;
 			}
