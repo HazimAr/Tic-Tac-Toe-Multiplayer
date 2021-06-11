@@ -58,7 +58,7 @@ export function Board({ socket, room }: any): JSX.Element {
 	const [fromUser, setFromUser] = useState(false);
 	const [userTurn, setUserTurn] = useState(0);
 
-	function calculateWinner(board: boolean[]) {
+	function calculateWinner(board: number[]) {
 		const lines = [
 			[0, 1, 2],
 			[3, 4, 5],
@@ -71,15 +71,11 @@ export function Board({ socket, room }: any): JSX.Element {
 		];
 		for (const i of lines) {
 			const [a, b, c] = i;
-			if (board[a] === true && board[b] === true && board[c] === true) {
+			if (board[a] === 1 && board[b] === 1 && board[c] === 1) {
 				return 1;
 			}
-			if (
-				board[a] === false &&
-				board[b] === false &&
-				board[c] === false
-			) {
-				return 2;
+			if (board[a] === 0 && board[b] === 0 && board[c] === 0) {
+				return 0;
 			}
 		}
 
@@ -128,7 +124,7 @@ export function Board({ socket, room }: any): JSX.Element {
 				console.log("server hover", hover);
 
 				if (turn !== userTurn) {
-					console.log(setHover)
+					console.log(setHover);
 					setHover(hover);
 				}
 			});
@@ -235,8 +231,8 @@ export function Board({ socket, room }: any): JSX.Element {
 				{winner !== undefined
 					? winner !== null
 						? winner
-							? "O has won"
-							: "X has won"
+							? "X has won"
+							: "O has won"
 						: "tie"
 					: turn === userTurn
 					? "You're Turn"
