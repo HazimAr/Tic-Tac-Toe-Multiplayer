@@ -233,7 +233,7 @@ export function Board({ socket, room }: any): JSX.Element {
 							: "O has won"
 						: "tie"
 					: turn === userTurn
-					? "You're Turn"
+					? "Your Turn"
 					: "Opponent's Turn"}
 				<Box>
 					{winner !== undefined ? (
