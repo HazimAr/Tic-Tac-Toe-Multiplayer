@@ -1,4 +1,4 @@
-import { Box, Button, Center, Flex, Heading, Input } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import router from "next/router";
 import { v4 as uuid } from "uuid";
@@ -20,11 +20,10 @@ export default function Index(): JSX.Element {
 					}}
 					placeholder="Room"
 				/>
-				<Flex justify="space-evenly">
+				<Box>
 					<Button
 						onClick={() => {
 							router.push(`/play?room=${room}`);
-							console.log(`You joined room: ${room}`);
 						}}
 					>
 						Join
@@ -36,7 +35,7 @@ export default function Index(): JSX.Element {
 					>
 						Create Private Match
 					</Button>
-				</Flex>
+				</Box>
 			</Box>
 		</Center>
 	);

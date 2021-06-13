@@ -12,7 +12,7 @@ import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import router from "next/router";
+// import router from "next/router";
 
 let Cell = styled(Center)`
 	border: 5px solid black;
@@ -47,15 +47,15 @@ let Cell = styled(Center)`
 // @ts-ignore
 Cell = motion(Cell);
 
-export function Board({ socket, room }: any): JSX.Element {
+export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	const [board, setBoard]: any = useState(
 		Array.from({ length: 9 }).fill(null)
 	);
 	const [turn, setTurn] = useState(0);
-	const [winner, setWinner] = useState();
-	const [hover, setHover] = useState(-1);
+	const [userTurn] = useState(serverTurn);
 	const [fromUser, setFromUser] = useState(false);
-	const [userTurn, setUserTurn] = useState(0);
+	const [winner, setWinner] = useState(null);
+	const [hover, setHover] = useState(-1);
 
 	function calculateWinner(board: number[]) {
 		const lines = [
@@ -85,8 +85,9 @@ export function Board({ socket, room }: any): JSX.Element {
 			}
 		});
 		if (nullCount === 0) {
-			return "tie";
+			return 3;
 		}
+		return null;
 	}
 
 	function isValidMove(i: number) {
@@ -94,7 +95,7 @@ export function Board({ socket, room }: any): JSX.Element {
 			if (board[i] !== null) {
 				return false;
 			}
-			if (winner !== undefined) {
+			if (winner !== null) {
 				return false;
 			}
 			return true;
@@ -104,66 +105,37 @@ export function Board({ socket, room }: any): JSX.Element {
 
 	function restart(emit = true) {
 		emit ? socket.emit("restart", room) : null;
-
-		const nBoard = Array.from({
-			length: 9,
-		}).fill(null);
-
-		setBoard(nBoard);
+		setBoard(
+			Array.from({
+				length: 9,
+			}).fill(null)
+		);
 		setTurn(1);
-
-		// eslint-disable-next-line unicorn/no-useless-undefined
-		setWinner(undefined);
+		setWinner(null);
 	}
-
-	useEffect(() => {
-		// console.log("real hover", hover);
-
-		
-		socket.on("hover", (hover: number) => {
-			// console.log("server hover", hover);
-
-			if (turn !== userTurn) {
-				setHover(hover);
-			}
-		});
-
-		if (turn === userTurn) {
-			socket.emit("hover", hover);
-		}
-	}, [hover]);
 
 	useEffect(() => {
 		if (fromUser) {
 			socket.emit("turn", board, turn, room);
 		}
-		const winner = calculateWinner(board);
-		if (winner !== undefined) {
-			// @ts-ignore
-			winner !== "tie" ? setWinner(winner) : setWinner(null);
-		}
+		//@ts-ignore
+		setWinner(calculateWinner(board));
 	}, [board]);
 
 	useEffect(() => {
-		console.log(`Turn:${turn}, UserTurn:${userTurn}`);
-	}, [turn, userTurn]);
-
-	useEffect(() => {
-		socket.on("turn", (board: boolean[], turn: number) => {
+		socket.on("turn", (board: number[], turn: number) => {
 			setFromUser(false);
-			setTurn(turn);
 			setBoard(board);
+			setTurn(turn);
 		});
 		socket.on("restart", () => {
 			restart(false);
 		});
-		socket.on("data", (turn: number) => {
-			setUserTurn(turn);
-		});
-		socket.on("end", () => {
-			router.push("/close");
-		});
 	}, []);
+
+	// useEffect(() => {
+	// 	console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+	// }, [turn, userTurn]);
 
 	return (
 		<Box>
@@ -172,26 +144,27 @@ export function Board({ socket, room }: any): JSX.Element {
 				alignContent="center"
 				templateColumns="repeat(3, auto)"
 			>
-				{board.map((yee: boolean, i: number) => {
+				{board.map((cell: boolean, i: number) => {
 					return (
 						<Cell
 							key={i}
 							onClick={() => {
 								if (isValidMove(i)) {
 									setHover(-1);
-									const nBoard = Array.from({
+
+									const tempBoard = Array.from({
 										length: 9,
 									}).fill(null);
 
 									board.map((i: number, v: number) => {
-										nBoard[v] = i;
+										tempBoard[v] = i;
 									});
 
-									nBoard[i] = turn;
+									tempBoard[i] = turn;
 
 									setFromUser(true);
+									setBoard(tempBoard);
 									setTurn(turn ? 0 : 1);
-									setBoard(nBoard);
 								}
 							}}
 							onHoverStart={() => {
@@ -208,8 +181,8 @@ export function Board({ socket, room }: any): JSX.Element {
 								}
 							}}
 						>
-							{yee !== null ? (
-								yee ? (
+							{cell !== null ? (
+								cell ? (
 									<X color="white" />
 								) : (
 									<O color="white" />
@@ -227,17 +200,17 @@ export function Board({ socket, room }: any): JSX.Element {
 				})}
 			</Grid>
 			<Box>
-				{winner !== undefined
-					? winner !== null
+				{winner !== null
+					? winner !== 3
 						? winner
-							? "X has won"
-							: "O has won"
-						: "tie"
+							? "X has won the game"
+							: "O has won the game"
+						: "You tied"
 					: turn === userTurn
 					? "Your Turn"
 					: "Opponent's Turn"}
 				<Box>
-					{winner !== undefined ? (
+					{winner !== null ? (
 						//@ts-ignore
 						<Button variant="outline" onClick={restart}>
 							Restart

@@ -11,34 +11,43 @@ const socket = io(DB_URL);
 
 export default function Index(): JSX.Element {
 	const router = useRouter();
+	const url = `${WEB}${router.asPath}`;
 	const [room, setRoom] = useState("");
 	const [started, setStarted] = useState(false);
-	const url = `${WEB}${router.asPath}`;
+	const [serverTurn, setServerTurn] = useState(0);
 
 	const { hasCopied, onCopy } = useClipboard(url);
 
 	useEffect(() => {
 		socket.on("connect", () => {
 			socket.on("start", () => {
-				console.log("start");
 				setStarted(true);
 			});
 			const room = getParameterByName("room");
 			if (room) {
 				setRoom(room);
-				socket.emit("join-room", room, (started: boolean | ((prevState: boolean) => boolean)) => {
-					setStarted(started);
-				});
+				socket.emit(
+					"join-room",
+					room,
+					(isStarted: boolean, serverTurn: number) => {
+						setServerTurn(serverTurn);
+						setStarted(isStarted);
+					}
+				);
 			}
-			socket.emit("check-start");
 		});
 	}, []);
 
 	return (
 		<Center h="100vh">
 			<Box>
+				{/* <Board socket={socket} serverTurn={serverTurn} /> */}
 				{started ? (
-					<Board socket={socket} room={room} />
+					<Board
+						socket={socket}
+						serverTurn={serverTurn}
+						room={room}
+					/>
 				) : (
 					<>
 						<Heading>Send this link to a friend</Heading>
