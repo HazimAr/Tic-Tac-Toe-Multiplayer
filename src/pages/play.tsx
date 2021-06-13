@@ -19,23 +19,22 @@ export default function Index(): JSX.Element {
 	const { hasCopied, onCopy } = useClipboard(url);
 
 	useEffect(() => {
-		socket.on("connect", () => {
-			socket.on("start", () => {
-				setStarted(true);
-			});
-			const room = getParameterByName("room");
-			if (room) {
-				setRoom(room);
-				socket.emit(
-					"join-room",
-					room,
-					(isStarted: boolean, serverTurn: number) => {
-						setServerTurn(serverTurn);
-						setStarted(isStarted);
-					}
-				);
-			}
+		socket.on("start", () => {
+			setStarted(true);
 		});
+		const room = getParameterByName("room");
+		console.log(room);
+		if (room) {
+			setRoom(room);
+			socket.emit(
+				"join-room",
+				room,
+				(isStarted: boolean, serverTurn: number) => {
+					setServerTurn(serverTurn);
+					setStarted(isStarted);
+				}
+			);
+		}
 	}, []);
 
 	return (
