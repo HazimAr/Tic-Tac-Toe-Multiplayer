@@ -56,6 +56,7 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	const [fromUser, setFromUser] = useState(false);
 	const [winner, setWinner] = useState(null);
 	const [hover, setHover] = useState(-1);
+	// const [doneLoading, setDoneLoading] = useState(false);
 
 	function calculateWinner(board: number[]) {
 		const lines = [
@@ -138,18 +139,49 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 		socket.on("restart", () => {
 			restart(false);
 		});
-
 		socket.on("hover", (hover: number) => {
+			// console.log(hover);
+			// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+
 			if (turn !== userTurn) {
+				// console.log("hover works");
 				setHover(hover);
 			}
 		});
 	}, []);
 
 	useEffect(() => {
+		// if (turn !== undefined && userTurn !== undefined && !doneLoading) {
+		// 	setDoneLoading(true);
+		// }
+		socket.removeListener("hover");
+			socket.on("hover", (hover: number) => {
+			// console.log(hover);
+			// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+
+			if (turn !== userTurn) {
+				// console.log("hover works");
+				setHover(hover);
+			}
+		});
+		
 		setHover(-1);
 		console.log(`Turn: ${turn} userTurn: ${userTurn}`);
 	}, [turn, userTurn]);
+
+	// useEffect(() => {
+	// 	if (doneLoading) {
+	// 		socket.on("hover", (hover: number) => {
+	// 			console.log(hover);
+	// 			console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+
+	// 			if (turn !== userTurn) {
+	// 				console.log("hover works");
+	// 				setHover(hover);
+	// 			}
+	// 		});
+	// 	}
+	// }, [doneLoading]);
 
 	return (
 		<Box>
