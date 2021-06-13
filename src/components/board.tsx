@@ -123,19 +123,32 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
+		if (turn === userTurn) {
+			socket.emit("hover", hover, room);
+		}
+	}, [hover]);
+
+	useEffect(() => {
 		socket.on("turn", (board: number[], turn: number) => {
 			setFromUser(false);
 			setBoard(board);
 			setTurn(turn);
 		});
+
 		socket.on("restart", () => {
 			restart(false);
 		});
+
+		socket.on("hover", (hover: number) => {
+			if (turn !== userTurn) {
+				setHover(hover);
+			}
+		});
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log(`Turn: ${turn} userTurn: ${userTurn}`);
-	// }, [turn, userTurn]);
+	useEffect(() => {
+		console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+	}, [turn, userTurn]);
 
 	return (
 		<Box>
