@@ -20,17 +20,20 @@ export default function Index(): JSX.Element {
 	useEffect(() => {
 		socket.on("connect", () => {
 			socket.on("start", () => {
+				console.log("start");
 				setStarted(true);
 			});
 			const room = getParameterByName("room");
 			if (room) {
 				setRoom(room);
-				socket.emit("join-room", room);
+				socket.emit("join-room", room, (started) => {
+					setStarted(started);
+				});
 			}
 			socket.emit("check-start");
-			console.log(socket.connected);
 		});
 	}, []);
+
 	return (
 		<Center h="100vh">
 			<Box>

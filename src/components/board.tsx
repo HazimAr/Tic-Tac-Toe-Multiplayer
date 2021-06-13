@@ -144,7 +144,7 @@ export function Board({ socket, room }: any): JSX.Element {
 	}, [board]);
 
 	useEffect(() => {
-		// console.log(`Turn:${turn}, UserTurn:${userTurn}`);
+		console.log(`Turn:${turn}, UserTurn:${userTurn}`);
 	}, [turn, userTurn]);
 
 	useEffect(() => {

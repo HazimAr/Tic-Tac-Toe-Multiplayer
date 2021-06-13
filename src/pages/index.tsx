@@ -1,7 +1,7 @@
 import { Box, Button, Center, Flex, Heading, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import router from "next/router";
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from "uuid";
 
 export default function Index(): JSX.Element {
 	const [room, setRoom] = useState("");
@@ -16,6 +16,7 @@ export default function Index(): JSX.Element {
 					onChange={(e) => {
 						const room = e.target.value;
 						setRoom(room);
+						console.log(room);
 					}}
 					placeholder="Room"
 				/>
@@ -28,7 +29,13 @@ export default function Index(): JSX.Element {
 					>
 						Join
 					</Button>
-					<Button onClick={() => {router.push(`/play?room=${uuid()}`);}}>Create Private Match</Button>
+					<Button
+						onClick={() => {
+							router.push(`/play?room=${uuid()}`);
+						}}
+					>
+						Create Private Match
+					</Button>
 				</Flex>
 			</Box>
 		</Center>
