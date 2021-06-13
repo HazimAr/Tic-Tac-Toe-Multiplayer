@@ -119,6 +119,7 @@ export function Board({ socket, room }: any): JSX.Element {
 	useEffect(() => {
 		// console.log("real hover", hover);
 
+		
 		socket.on("hover", (hover: number) => {
 			// console.log("server hover", hover);
 
