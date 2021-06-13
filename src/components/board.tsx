@@ -166,7 +166,7 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 		});
 		
 		setHover(-1);
-		console.log(`Turn: ${turn} userTurn: ${userTurn}`);
+		// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
 	}, [turn, userTurn]);
 
 	// useEffect(() => {
