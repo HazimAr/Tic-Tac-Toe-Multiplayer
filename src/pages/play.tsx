@@ -26,7 +26,7 @@ export default function Index(): JSX.Element {
 			const room = getParameterByName("room");
 			if (room) {
 				setRoom(room);
-				socket.emit("join-room", room, (started) => {
+				socket.emit("join-room", room, (started: boolean | ((prevState: boolean) => boolean)) => {
 					setStarted(started);
 				});
 			}
