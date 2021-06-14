@@ -69,9 +69,6 @@ export default function Index(): JSX.Element {
 							serverTurn={serverTurn}
 							room={room}
 						/>
-						<Box>
-							<Text>Ping: {ping}ms</Text>
-						</Box>
 					</Box>
 				) : (
 					<Box>
@@ -83,6 +80,9 @@ export default function Index(): JSX.Element {
 						</Button>
 					</Box>
 				)}
+				<Box>
+					<Text>Ping: {ping}ms</Text>
+				</Box>
 			</Box>
 		</Center>
 	);
