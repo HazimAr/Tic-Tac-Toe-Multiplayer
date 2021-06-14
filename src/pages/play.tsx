@@ -36,14 +36,10 @@ export default function Index(): JSX.Element {
 
 		socket.on("leave", () => {
 			setStarted(false);
-			socket.emit(
-				"join-room",
-				room,
-				(isStarted: boolean, serverTurn: number) => {
-					setServerTurn(serverTurn);
-					setStarted(false);
-				}
-			);
+			socket.emit("join-room", room, (serverTurn: number) => {
+				setServerTurn(serverTurn);
+				setStarted(false);
+			});
 		});
 
 		const room = getParameterByName("room");
