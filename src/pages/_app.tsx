@@ -11,8 +11,9 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				<title>{META.title}</title>
 				<link rel="icon" href="/favicon.ico" />
 				<script
+					data-ad-client="ca-pub-8350269166887594"
 					async
-					src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+					src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
 				/>
 			</Head>
 
