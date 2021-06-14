@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Input } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Heading, Input } from "@chakra-ui/react";
 import { useState } from "react";
 import router from "next/router";
 import { v4 as uuid } from "uuid";
@@ -19,7 +19,7 @@ export default function Index(): JSX.Element {
 					}}
 					placeholder="Room"
 				/>
-				<Box>
+				<Flex justify="space-between">
 					<Button
 						onClick={() => {
 							router.push(`/play?room=${room}`);
@@ -41,7 +41,7 @@ export default function Index(): JSX.Element {
 					>
 						Settings
 					</Button>
-				</Box>
+				</Flex>
 			</Box>
 		</Center>
 	);
