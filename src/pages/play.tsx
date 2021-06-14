@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 import { getParameterByName } from "@lib/cookie";
 import { useRouter } from "next/router";
 import { useClipboard } from "@chakra-ui/react";
+import useInterval from "@hooks/useInterval";
 
 const socket = io(DB_URL);
 
@@ -18,6 +19,15 @@ export default function Index(): JSX.Element {
 	const [ping, setPing] = useState(0);
 
 	const { hasCopied, onCopy } = useClipboard(url);
+
+	useInterval(() => {
+		const start = Date.now();
+
+		// volatile, so the packet will be discarded if the socket is not connected
+		socket.volatile.emit("ping", () => {
+			setPing(Date.now() - start);
+		});
+	}, 100);
 
 	useEffect(() => {
 		socket.on("start", () => {

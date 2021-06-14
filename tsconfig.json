@@ -21,6 +21,7 @@
 		"paths": {
 			"@components/*": ["components/*"],
 			"@styles/*": ["styles/*"],
+			"@hooks/*": ["hooks/*"],
 			"@utils/*": ["utils/*"],
 			"@lib/*": ["lib/*"],
 			"@src/*": ["/*"],
@@ -33,6 +34,7 @@
 		"**/*.tsx",
 		"src/pages/_document.js",
 		"src/pages/_error.js",
-		"src/lib/gtag.js"
-, "src/pages/index.tsx"	]
+		"src/lib/gtag.js",
+		"src/pages/index.tsx"
+, "src/hooks"	]
 }
