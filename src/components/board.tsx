@@ -7,12 +7,11 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable no-negated-condition */
-import { Box, Grid, Center, Button } from "@chakra-ui/react";
+import { Box, Grid, Center, Button, Flex } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import router from "next/router";
 
 let Cell = styled(Center)`
 	border: 5px solid black;
@@ -56,7 +55,6 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	const [fromUser, setFromUser] = useState(false);
 	const [winner, setWinner] = useState(null);
 	const [hover, setHover] = useState(-1);
-	// const [doneLoading, setDoneLoading] = useState(false);
 
 	function calculateWinner(board: number[]) {
 		const lines = [
@@ -140,51 +138,37 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 			restart(false);
 		});
 		socket.on("hover", (hover: number) => {
-			// console.log(hover);
-			// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
-
 			if (turn !== userTurn) {
-				// console.log("hover works");
 				setHover(hover);
 			}
 		});
 	}, []);
 
 	useEffect(() => {
-		// if (turn !== undefined && userTurn !== undefined && !doneLoading) {
-		// 	setDoneLoading(true);
-		// }
 		socket.removeListener("hover");
-			socket.on("hover", (hover: number) => {
-			// console.log(hover);
-			// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
-
+		socket.on("hover", (hover: number) => {
 			if (turn !== userTurn) {
-				// console.log("hover works");
 				setHover(hover);
 			}
 		});
-		
+
 		setHover(-1);
-		// console.log(`Turn: ${turn} userTurn: ${userTurn}`);
 	}, [turn, userTurn]);
-
-	// useEffect(() => {
-	// 	if (doneLoading) {
-	// 		socket.on("hover", (hover: number) => {
-	// 			console.log(hover);
-	// 			console.log(`Turn: ${turn} userTurn: ${userTurn}`);
-
-	// 			if (turn !== userTurn) {
-	// 				console.log("hover works");
-	// 				setHover(hover);
-	// 			}
-	// 		});
-	// 	}
-	// }, [doneLoading]);
 
 	return (
 		<Box>
+			<Flex justify="center" align="center">
+				You are playing as:
+				{userTurn ? (
+					<Box boxSize="100px">
+						<X color="white" />
+					</Box>
+				) : (
+					<Box boxSize="100px">
+						<O color="white" />
+					</Box>
+				)}
+			</Flex>
 			<Grid
 				justifyContent="center"
 				alignContent="center"
