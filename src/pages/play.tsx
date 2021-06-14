@@ -27,7 +27,7 @@ export default function Index(): JSX.Element {
 		socket.volatile.emit("ping", () => {
 			setPing(Date.now() - start);
 		});
-	}, 100);
+	}, 1000);
 
 	useEffect(() => {
 		socket.on("start", () => {
@@ -41,7 +41,7 @@ export default function Index(): JSX.Element {
 				room,
 				(isStarted: boolean, serverTurn: number) => {
 					setServerTurn(serverTurn);
-					setStarted(isStarted);
+					setStarted(false);
 				}
 			);
 		});
