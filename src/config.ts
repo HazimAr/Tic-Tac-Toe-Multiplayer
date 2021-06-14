@@ -2,7 +2,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const DB_URL = IS_PRODUCTION
 	? "https://tic-calpico.herokuapp.com"
-	: "http://localhost:8888";
+	: "http://localhost:3001";
 
 const WEB = IS_PRODUCTION
 	? "https://tic-tac-toe-online.vercel.app"
