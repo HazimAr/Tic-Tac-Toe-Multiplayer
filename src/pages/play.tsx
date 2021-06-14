@@ -20,7 +20,6 @@ export default function Index(): JSX.Element {
 
 	useEffect(() => {
 		socket.on("start", () => {
-			console.log(socket);
 			setStarted(true);
 		});
 
@@ -37,7 +36,6 @@ export default function Index(): JSX.Element {
 		});
 
 		const room = getParameterByName("room");
-		console.log(room);
 
 		if (room) {
 			setRoom(room);
