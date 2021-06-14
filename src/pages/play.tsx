@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading } from "@chakra-ui/react";
+import { Box, Button, Text, Center, Heading } from "@chakra-ui/react";
 import { Board } from "@components/board";
 import { DB_URL, WEB } from "config";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ export default function Index(): JSX.Element {
 	const [room, setRoom] = useState("");
 	const [started, setStarted] = useState(false);
 	const [serverTurn, setServerTurn] = useState(0);
+	const [ping, setPing] = useState(0);
 
 	const { hasCopied, onCopy } = useClipboard(url);
 
@@ -54,20 +55,25 @@ export default function Index(): JSX.Element {
 		<Center h="100vh">
 			<Box>
 				{started ? (
-					<Board
-						socket={socket}
-						serverTurn={serverTurn}
-						room={room}
-					/>
+					<Box>
+						<Board
+							socket={socket}
+							serverTurn={serverTurn}
+							room={room}
+						/>
+						<Box>
+							<Text>Ping: {ping}ms</Text>
+						</Box>
+					</Box>
 				) : (
-					<>
+					<Box>
 						<Heading>Send this link to a friend</Heading>
 
 						<Heading size="md">{url}</Heading>
 						<Button onClick={onCopy}>
 							{hasCopied ? "Copied" : "Copy"}
 						</Button>
-					</>
+					</Box>
 				)}
 			</Box>
 		</Center>
