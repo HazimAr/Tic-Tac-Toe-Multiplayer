@@ -7,7 +7,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable unicorn/consistent-function-scoping */
 /* eslint-disable no-negated-condition */
-import { Box, Grid, Center, Button, Flex } from "@chakra-ui/react";
+import { Box, Grid, Center, Button, Text, Flex } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -55,6 +55,7 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	const [fromUser, setFromUser] = useState(false);
 	const [winner, setWinner] = useState(null);
 	const [hover, setHover] = useState(-1);
+	const [ping, setPing] = useState(0);
 
 	function calculateWinner(board: number[]) {
 		const lines = [
@@ -239,13 +240,16 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 					: turn === userTurn
 					? "Your Turn"
 					: "Opponent's Turn"}
-				<Box>
-					{winner !== null ? (
-						//@ts-ignore
+				{winner !== null ? (
+					<Box>
+						{/* @ts-ignore */}
 						<Button variant="outline" onClick={restart}>
 							Restart
 						</Button>
-					) : null}
+					</Box>
+				) : null}
+				<Box>
+					<Text>Ping: {ping}ms</Text>
 				</Box>
 			</Box>
 		</Box>
