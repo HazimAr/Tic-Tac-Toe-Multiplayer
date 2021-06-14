@@ -1,14 +1,24 @@
 import AdSense from "react-adsense";
+import { Flex } from "@chakra-ui/react";
 
-export default function Ads() {
+export default function Ads({ children }: any) {
 	return (
-		<AdSense.Google
-			client="ca-pub-7292810486004926"
-			slot="7806394673"
-			style={{ display: "block" }}
-			format="auto"
-			responsive="true"
-			layoutKey="-gw-1+2a-9x+5c"
-		/>
+		<Flex justify="center" align="center">
+			<AdSense.Google
+				client="4286944118-pub-8350269166887594"
+				slot="7806394673"
+				style={{ display: "block" }}
+				format="auto"
+				responsive="true"
+			/>
+			{children}
+			<AdSense.Google
+				client="4286944118-pub-8350269166887594"
+				slot="7806394673"
+				style={{ display: "block" }}
+				format="auto"
+				responsive="true"
+			/>
+		</Flex>
 	);
 }
