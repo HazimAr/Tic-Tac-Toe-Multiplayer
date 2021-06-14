@@ -27,7 +27,7 @@ export default function Index(): JSX.Element {
 		socket.volatile.emit("ping", () => {
 			setPing(Date.now() - start);
 		});
-	}, 1000);
+	}, 750);
 
 	useEffect(() => {
 		socket.on("start", () => {
