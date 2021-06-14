@@ -20,10 +20,25 @@ export default function Index(): JSX.Element {
 
 	useEffect(() => {
 		socket.on("start", () => {
+			console.log(socket);
 			setStarted(true);
 		});
+
+		socket.on("leave", () => {
+			setStarted(false);
+			socket.emit(
+				"join-room",
+				room,
+				(isStarted: boolean, serverTurn: number) => {
+					setServerTurn(serverTurn);
+					setStarted(isStarted);
+				}
+			);
+		});
+
 		const room = getParameterByName("room");
 		console.log(room);
+
 		if (room) {
 			setRoom(room);
 			socket.emit(
@@ -40,7 +55,6 @@ export default function Index(): JSX.Element {
 	return (
 		<Center h="100vh">
 			<Box>
-				{/* <Board socket={socket} serverTurn={serverTurn} /> */}
 				{started ? (
 					<Board
 						socket={socket}
