@@ -25,7 +25,9 @@ export default function Index(): JSX.Element {
 
 		// volatile, so the packet will be discarded if the socket is not connected
 		socket.volatile.emit("ping", () => {
-			setPing(Date.now() - start);
+			const latency = Date.now() - start;
+			setPing(latency);
+			console.log(latency);
 		});
 	}, 1000);
 

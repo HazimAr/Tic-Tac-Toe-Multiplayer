@@ -16,7 +16,6 @@ export default function Index(): JSX.Element {
 					onChange={(e) => {
 						const room = e.target.value;
 						setRoom(room);
-						console.log(room);
 					}}
 					placeholder="Room"
 				/>
