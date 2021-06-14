@@ -34,6 +34,13 @@ export default function Index(): JSX.Element {
 					>
 						Create Private Match
 					</Button>
+					<Button
+						onClick={() => {
+							router.push("/settings");
+						}}
+					>
+						Settings
+					</Button>
 				</Box>
 			</Box>
 		</Center>

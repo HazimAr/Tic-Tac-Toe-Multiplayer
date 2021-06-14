@@ -9,6 +9,7 @@
 /* eslint-disable no-negated-condition */
 import { Box, Grid, Center, Button, Flex } from "@chakra-ui/react";
 import { X, O } from "@components/playerHandler";
+import { getCookie } from "@lib/cookie";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
@@ -55,6 +56,7 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	const [fromUser, setFromUser] = useState(false);
 	const [winner, setWinner] = useState(null);
 	const [hover, setHover] = useState(-1);
+	const [color, setColor] = useState("White");
 
 	function calculateWinner(board: number[]) {
 		const lines = [
@@ -128,6 +130,9 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 	}, [hover]);
 
 	useEffect(() => {
+		const cookie = getCookie("color");
+		if (cookie) setColor(cookie);
+
 		socket.on("turn", (board: number[], turn: number) => {
 			setFromUser(false);
 			setBoard(board);
@@ -137,6 +142,7 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 		socket.on("restart", () => {
 			restart(false);
 		});
+
 		socket.on("hover", (hover: number) => {
 			if (turn !== userTurn) {
 				setHover(hover);
@@ -161,11 +167,11 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 				You are playing as:
 				{userTurn ? (
 					<Box boxSize="100px">
-						<X color="white" />
+						<X color={color} />
 					</Box>
 				) : (
 					<Box boxSize="100px">
-						<O color="white" />
+						<O color={color} />
 					</Box>
 				)}
 			</Flex>
@@ -213,9 +219,9 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 						>
 							{cell !== null ? (
 								cell ? (
-									<X color="white" />
+									<X color={color} />
 								) : (
-									<O color="white" />
+									<O color={color} />
 								)
 							) : null}
 							{hover === i ? (
@@ -247,7 +253,6 @@ export function Board({ socket, serverTurn, room }: any): JSX.Element {
 						</Button>
 					</Box>
 				) : null}
-				
 			</Box>
 		</Box>
 	);
