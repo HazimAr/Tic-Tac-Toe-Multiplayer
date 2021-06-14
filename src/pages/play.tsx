@@ -25,9 +25,7 @@ export default function Index(): JSX.Element {
 
 		// volatile, so the packet will be discarded if the socket is not connected
 		socket.volatile.emit("ping", () => {
-			const latency = Date.now() - start;
-			setPing(latency);
-			console.log(latency);
+			setPing(Date.now() - start);
 		});
 	}, 1000);
 
@@ -38,10 +36,14 @@ export default function Index(): JSX.Element {
 
 		socket.on("leave", () => {
 			setStarted(false);
-			socket.emit("join-room", room, (serverTurn: number) => {
-				setServerTurn(serverTurn);
-				setStarted(false);
-			});
+			socket.emit(
+				"join-room",
+				room,
+				(isStarted: boolean, serverTurn: number) => {
+					setServerTurn(serverTurn);
+					setStarted(isStarted);
+				}
+			);
 		});
 
 		const room = getParameterByName("room");
