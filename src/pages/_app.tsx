@@ -10,6 +10,10 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 			<Head>
 				<title>{META.title}</title>
 				<link rel="icon" href="/favicon.ico" />
+				<script
+					async
+					src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+				/>
 			</Head>
 
 			<ChakraProvider>

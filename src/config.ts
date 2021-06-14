@@ -12,6 +12,7 @@ type MetaType = {
 	title: string;
 	lang: string;
 	description: string;
+	image: string;
 	url: string;
 };
 
@@ -20,7 +21,8 @@ const META: MetaType = {
 	lang: "en-us",
 	description:
 		"Play Tic-Tac-Toe in real time with your friends. Just invite them to your room using a link and boom you will have endless fun.",
-	url: "",
+	url: "https://tic-tac-toe-online.vercel.app",
+	image: "/logo.png",
 };
 
 export { IS_PRODUCTION, META, DB_URL, WEB };
