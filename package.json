@@ -29,6 +29,7 @@
 		"framer-motion": "^4.1.17",
 		"next": "^10.2.3",
 		"react": "^17.0.2",
+		"react-adsense": "^0.1.0",
 		"react-dom": "17.0.2",
 		"react-icons": "^4.2.0",
 		"socket.io-client": "^4.1.2",
