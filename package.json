@@ -41,7 +41,7 @@
 		"@types/babel__core": "^7.1.15",
 		"@types/jest": "^26.0.24",
 		"@types/next": "^9.0.0",
-		"@types/node": "^16.7.8",
+		"@types/node": "^16.10.1",
 		"@types/react": "^17.0.16",
 		"@types/react-icons": "^3.0.0",
 		"@types/react-select": "^4.0.17",
