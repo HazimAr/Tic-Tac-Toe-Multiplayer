@@ -12,7 +12,7 @@ const socket = io(DB_URL);
 
 export default function Index(): JSX.Element {
   const router = useRouter();
-  const [url, setUrl] = useState("loading...");
+  const [url, setUrl] = useState("");
   const [room, setRoom] = useState("");
   const [started, setStarted] = useState(false);
   const [serverTurn, setServerTurn] = useState(0);
@@ -22,7 +22,7 @@ export default function Index(): JSX.Element {
     const host = window.location.host;
     const baseUrl = `https://${host}`;
 
-    setUrl(`${baseUrl}/${router.pathname}`);
+    setUrl(`${baseUrl}${router.asPath}`);
   }, [router.pathname]);
 
   const { hasCopied, onCopy } = useClipboard(url);
