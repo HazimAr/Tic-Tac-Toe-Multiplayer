@@ -4,10 +4,6 @@ const DB_URL = IS_PRODUCTION
 	? "https://tic-calpico.herokuapp.com"
 	: "http://localhost:3001";
 
-const WEB = IS_PRODUCTION
-	? "https://tic-tac-toe-online.vercel.app"
-	: "http://localhost:3000";
-
 type MetaType = {
 	title: string;
 	lang: string;
@@ -23,4 +19,4 @@ const META: MetaType = {
 	url: "",
 };
 
-export { IS_PRODUCTION, META, DB_URL, WEB };
+export { IS_PRODUCTION, META, DB_URL };
