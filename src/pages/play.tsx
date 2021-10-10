@@ -11,81 +11,82 @@ import useInterval from "@hooks/useInterval";
 const socket = io(DB_URL);
 
 export default function Index(): JSX.Element {
-	const router = useRouter();
-	const url = `https://${window.location.host}/${router.asPath}`;
-	const [room, setRoom] = useState("");
-	const [started, setStarted] = useState(false);
-	const [serverTurn, setServerTurn] = useState(0);
-	const [ping, setPing] = useState(0);
+  const router = useRouter();
+  const [url, setUrl] = useState("loading...");
+  const [room, setRoom] = useState("");
+  const [started, setStarted] = useState(false);
+  const [serverTurn, setServerTurn] = useState(0);
+  const [ping, setPing] = useState(0);
 
-	const { hasCopied, onCopy } = useClipboard(url);
+  useEffect(() => {
+    const host = window.location.host;
+    const baseUrl = `https://${host}`;
 
-	useInterval(() => {
-		const start = Date.now();
+    setUrl(`${baseUrl}/${router.pathname}`);
+  }, [router.pathname]);
 
-		// volatile, so the packet will be discarded if the socket is not connected
-		socket.volatile.emit("ping", () => {
-			setPing(Date.now() - start);
-		});
-	}, 750);
+  const { hasCopied, onCopy } = useClipboard(url);
 
-	useEffect(() => {
-		socket.on("start", () => {
-			setStarted(true);
-		});
+  useInterval(() => {
+    const start = Date.now();
 
-		socket.on("leave", () => {
-			setStarted(false);
-			socket.emit(
-				"join-room",
-				room,
-				(isStarted: boolean, serverTurn: number) => {
-					setServerTurn(serverTurn);
-					setStarted(isStarted);
-				}
-			);
-		});
+    // volatile, so the packet will be discarded if the socket is not connected
+    socket.volatile.emit("ping", () => {
+      setPing(Date.now() - start);
+    });
+  }, 750);
 
-		const room = getParameterByName("room");
+  useEffect(() => {
+    socket.on("start", () => {
+      setStarted(true);
+    });
 
-		if (room) {
-			setRoom(room);
-			socket.emit(
-				"join-room",
-				room,
-				(isStarted: boolean, serverTurn: number) => {
-					setServerTurn(serverTurn);
-					setStarted(isStarted);
-				}
-			);
-		}
-	}, []);
+    socket.on("leave", () => {
+      setStarted(false);
+      socket.emit(
+        "join-room",
+        room,
+        (isStarted: boolean, serverTurn: number) => {
+          setServerTurn(serverTurn);
+          setStarted(isStarted);
+        }
+      );
+    });
 
-	return (
-		<Center h="100vh">
-			<Box>
-				{started ? (
-					<Box>
-						<Board
-							socket={socket}
-							serverTurn={serverTurn}
-							room={room}
-						/>
-					</Box>
-				) : (
-					<Box>
-						<Heading>Send this link to a friend</Heading>
+    const room = getParameterByName("room");
 
-						<Heading size="md">{url}</Heading>
-						<Button onClick={onCopy}>
-							{hasCopied ? "Copied" : "Copy"}
-						</Button>
-					</Box>
-				)}
-				<Box>
-					<Text>Ping: {ping}ms</Text>
-				</Box>
-			</Box>
-		</Center>
-	);
+    if (room) {
+      setRoom(room);
+      socket.emit(
+        "join-room",
+        room,
+        (isStarted: boolean, serverTurn: number) => {
+          setServerTurn(serverTurn);
+          setStarted(isStarted);
+        }
+      );
+    }
+  }, []);
+
+  return (
+    <Center h="100vh">
+      <Box>
+        {started ? (
+          <Box>
+            <Board socket={socket} serverTurn={serverTurn} room={room} />
+          </Box>
+        ) : (
+          <Box>
+            <Heading>Send this link to a friend</Heading>
+
+            <Heading size="md">{url}</Heading>
+            <Button onClick={onCopy}>{hasCopied ? "Copied" : "Copy"}</Button>
+          </Box>
+        )}
+        <Box>
+          <Text>Ping: {ping}ms</Text>
+        </Box>
+      </Box>
+    </Center>
+  );
 }
