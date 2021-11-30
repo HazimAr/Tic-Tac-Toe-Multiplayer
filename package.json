@@ -20,7 +20,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"@babel/core": "^7.15.0",
+		"@babel/core": "^7.16.0",
 		"@chakra-ui/icons": "^1.0.15",
 		"@chakra-ui/react": "^1.7.2",
 		"@emotion/react": "^11.4.1",
