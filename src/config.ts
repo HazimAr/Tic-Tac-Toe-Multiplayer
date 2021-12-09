@@ -1,7 +1,7 @@
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const DB_URL = IS_PRODUCTION
-	? "https://tic-calpico.herokuapp.com"
+	? "https://tic-webdefy.herokuapp.com"
 	: "http://localhost:3001";
 
 type MetaType = {
