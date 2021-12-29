@@ -48,7 +48,7 @@
 		"@types/styled-components": "^5.1.15",
 		"babel-plugin-styled-components": "^2.0.2",
 		"eslint": "^8.3.0",
-		"eslint-config-galex": "^3.3.4",
+		"eslint-config-galex": "^3.5.3",
 		"jest": "^27.4.2",
 		"jest-watch-typeahead": "^1.0.0",
 		"prettier": "^2.5.0"
